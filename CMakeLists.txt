@@ -8,32 +8,32 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # 1. VERIFY LLVM INSTALLATION DIR
 # This is just a bit of a sanity checking.
 #===============================================================================
-set(LT_LLVM_INSTALL_DIR "" CACHE PATH "LLVM installation directory")
+set(LLVM_INSTALL_DIR "" CACHE PATH "LLVM installation directory")
 
 # 1.1 Check the "include" directory
-set(LT_LLVM_INCLUDE_DIR "${LT_LLVM_INSTALL_DIR}/include/llvm")
-if(NOT EXISTS "${LT_LLVM_INCLUDE_DIR}")
+set(LLVM_INCLUDE_DIR "${LLVM_INSTALL_DIR}/include/llvm")
+if(NOT EXISTS "${LLVM_INCLUDE_DIR}")
     message(FATAL_ERROR
-  " LT_LLVM_INSTALL_DIR (${LT_LLVM_INCLUDE_DIR}) is invalid.")
+  " LLVM_INSTALL_DIR (${LLVM_INCLUDE_DIR}) is invalid.")
 endif()
 
 # 1.2 Check that the LLVMConfig.cmake file exists (the location depends on the
 # OS)
-set(LT_VALID_INSTALLATION FALSE)
+set(VALID_INSTALLATION FALSE)
 
 # Ubuntu + Darwin
-if(EXISTS "${LT_LLVM_INSTALL_DIR}/lib/cmake/llvm/LLVMConfig.cmake")
-    set(LT_VALID_INSTALLATION TRUE)
+if(EXISTS "${LLVM_INSTALL_DIR}/lib/cmake/llvm/LLVMConfig.cmake")
+    set(VALID_INSTALLATION TRUE)
 endif()
 
 # Fedora
-if(EXISTS "${LT_LLVM_INSTALL_DIR}/lib64/cmake/llvm/LLVMConfig.cmake")
-    set(LT_VALID_INSTALLATION TRUE)
+if(EXISTS "${LLVM_INSTALL_DIR}/lib64/cmake/llvm/LLVMConfig.cmake")
+    set(VALID_INSTALLATION TRUE)
 endif()
 
-if(NOT ${LT_VALID_INSTALLATION})
+if(NOT ${VALID_INSTALLATION})
     message(FATAL_ERROR
-    "LLVM installation directory, (${LT_LLVM_INSTALL_DIR}), is invalid. Couldn't
+    "LLVM installation directory, (${LLVM_INSTALL_DIR}), is invalid. Couldn't
     find LLVMConfig.cmake.")
 endif()
 
@@ -47,7 +47,7 @@ endif()
 # LLVMConfig.cmake is located in "/usr/lib64/cmake/llvm". But this path is
 # among other paths that will be checked by default when using
 # `find_package(llvm)`. So there's no need to add it here.
-list(APPEND CMAKE_PREFIX_PATH "${LT_LLVM_INSTALL_DIR}/lib/cmake/llvm/")
+list(APPEND CMAKE_PREFIX_PATH "${LLVM_INSTALL_DIR}/lib/cmake/llvm/")
 
 # The way LLVMConfigVersion.cmake is set up, it will only match MAJOR.MINOR
 # exactly, even if we do not specify "REQUIRED" in the statement below.
@@ -60,7 +60,7 @@ if("${LLVM_VERSION_MAJOR}" VERSION_LESS 21)
 endif()
 
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
-message(STATUS "Using LLVMConfig.cmake in: ${LT_LLVM_INSTALL_DIR}")
+message(STATUS "Using LLVMConfig.cmake in: ${LLVM_INSTALL_DIR}")
 
 message("LLVM STATUS:
   Definitions ${LLVM_DEFINITIONS}

@@ -22,7 +22,7 @@ To build the pass, run the following commands from the root of the repository:
 export LLVM_DIR=<see GUIDELINES.md to know the location of your LLVM 21 installation>
 mkdir build
 cd build
-cmake -DLT_LLVM_INSTALL_DIR=${LLVM_DIR} .. # -G Ninja
+cmake -DLLVM_INSTALL_DIR=${LLVM_DIR} .. # -G Ninja
 make # ninja
 ```
 
