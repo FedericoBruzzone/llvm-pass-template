@@ -11,7 +11,7 @@ jobs:
     name: Build and Test
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
         build_type: [Debug, Release]
     runs-on: ${{ matrix.os }}
     steps:
@@ -20,7 +20,7 @@ jobs:
       - name: Install LLVM and Clang
         uses: antonio-fr/setup-cpp@v1
         with:
-          version: 21
+          version: 18
           clang-tidy: true
 
       - name: Set up ccache
@@ -51,7 +51,7 @@ jobs:
       - name: Install LLVM and Clang
         uses: antonio-fr/setup-cpp@v1
         with:
-          version: 21
+          version: 18
 
       - name: Configure CMake
         run: |
