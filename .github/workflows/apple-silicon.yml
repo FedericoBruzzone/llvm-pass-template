@@ -33,7 +33,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           mkdir build && cd build
-          cmake -DLT_LLVM_INSTALL_DIR="/opt/homebrew/opt/llvm@21/" -DCMAKE_BUILD_TYPE=${{ matrix.type }} ../
+          cmake -DLLVM_INSTALL_DIR="/opt/homebrew/opt/llvm@21/" -DCMAKE_BUILD_TYPE=${{ matrix.type }} ../
           make -j2
       - name: Run tests for `llvm-pass-template`
         run: |
