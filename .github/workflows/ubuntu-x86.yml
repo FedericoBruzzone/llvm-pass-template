@@ -39,4 +39,4 @@ jobs:
       - name: Run tests for `llvm-pass-template`
         run: |
           cd $GITHUB_WORKSPACE/build
-          lit -va ../test/
+          lit -va ./test/
