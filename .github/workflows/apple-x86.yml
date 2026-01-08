@@ -1,4 +1,4 @@
-name: Apple Silicon
+name: Apple x86
 
 on: 
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-15-intel
     strategy:
       matrix:
         type: [Debug, Release]
@@ -33,9 +33,9 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           mkdir build && cd build
-          cmake -DLLVM_INSTALL_DIR="/opt/homebrew/opt/llvm@21/" -DCMAKE_BUILD_TYPE=${{ matrix.type }} ../
+          cmake -DLLVM_INSTALL_DIR="/usr/local/opt/llvm@21/" -DCMAKE_BUILD_TYPE=${{ matrix.type }} ../
           make -j2
       - name: Run tests for `llvm-pass-template`
         run: |
           cd $GITHUB_WORKSPACE/build
-          lit -va ../test/
+          lit -va ./test/

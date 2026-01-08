@@ -1,4 +1,15 @@
+[ubuntu-x86]: https://github.com/FedericoBruzzone/llvm-pass-template/actions/workflows/ubuntu-x86.yml
+[ubuntu-x86-shield]: https://github.com/FedericoBruzzone/llvm-pass-template/actions/workflows/ubuntu-x86.yml/badge.svg
+[apple-silicon]: https://github.com/FedericoBruzzone/llvm-pass-template/actions/workflows/apple-silicon.yml
+[apple-silicon-shield]: https://github.com/FedericoBruzzone/llvm-pass-template/actions/workflows/apple-silicon.yml/badge.svg
+[apple-x86]: https://github.com/FedericoBruzzone/llvm-pass-template/actions/workflows/apple-x86.yml
+[apple-x86-shield]: https://github.com/FedericoBruzzone/llvm-pass-template/actions/workflows/apple-x86.yml/badge.svg
+
 # LLVM Pass Template
+
+[![Ubuntu x86][ubuntu-x86-shield]][ubuntu-x86]
+[![Apple Silicon][apple-silicon-shield]][apple-silicon]
+[![Apple x86][apple-x86-shield]][apple-x86]
 
 This repository provides a template to create your own LLVM passes using LLVM 21, drawing heavily on [llvm-tutor](https://github.com/banach-space/llvm-tutor) and [Writing an LLVM Pass](https://llvm.org/docs/WritingAnLLVMNewPMPass.html).
 
