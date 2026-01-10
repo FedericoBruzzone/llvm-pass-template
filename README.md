@@ -18,9 +18,9 @@ It allows you to quickly bootstrap, test, and benchmark new _out-of-tree_ LLVM p
 The `lib` folder contains an example pass called **FunctionCounter**, which counts the number of functions in the input LLVM IR file and prints the result to the standard output. 
 
 You can `git clone` this repository and start implementing your own LLVM passes right away.
-This repository also contains:
+This repository is shipped with:
 - An LLVM pass plugin that can be loaded into the `opt` tool (see [Run the pass with `opt`](#run-the-pass-with-opt) section for more details).
-- An LLVM pass that can be registered as part of an existing LLVM pipeline (see [Run the pass against an existing default (-O{0,1,2,3,s,z}) LLVM pipeline](#run-the-pass-against-an-existing-default--o0123sz--llvm-pipeline) section for more details), both with `clang` and `opt`.
+- An LLVM pass that can be registered as part of an existing LLVM (both `clang` and `opt`) default pipeline (see [Run the pass against an existing default LLVM pipeline](#run-the-pass-against-an-existing-default-llvm-pipeline) section for more details).
 - A standalone tool (`func-count`) to run the **FunctionCounter** pass without relying on `opt` (see [Run the pass as executable](#run-the-pass-as-executable) section for more details).
 - A set of unit tests for the **FunctionCounter** pass using `llvm-lit` and `FileCheck` (see [Testing](#testing) section for more details).
 - A benchmarking setup using `llvm-test-suite` to measure the performance impact of your pass (see [Benchmarking with llvm-test-suite](#benchmarking-with-llvm-test-suite) section for more details).
@@ -62,7 +62,7 @@ ${LLVM_DIR}/bin/opt \
 
 > Note that, `-disable-output` is used to avoid generating an output file. If you want to generate an output file, replace `-disable-output` with `-S -o <output-file>.ll`. Assuming you have an LLVM assert build,  if your pass leverages the LLVM internal logger, you can either enable logging globally with `-debug` or selectively for your pass only. To enable logging for your pass only, after the definition of the `DEBUG_TYPE=<what-you-want>` macro, you can enable logging by passing the `-debug-only="<what-you-want>"` flag to `opt`.
 
-## Run the pass against an existing default (-O{0,1,2,3,s,z}) LLVM pipeline
+## Run the pass against an existing default LLVM pipeline
 
 > [!NOTE]
 > This section assume that your pass is registered as a step of an existing LLVM pipeline. 
@@ -70,7 +70,7 @@ ${LLVM_DIR}/bin/opt \
 > Of course, there are a plethora of other registration methods you can use depending on where you want to insert your pass within the pipeline.
 > The [FunctionCounter.cpp](lib/FunctionCounter/FunctionCounter.cpp) file registers the **FunctionCounter** pass by using `PB.registerPipelineStartEPCallback` as an example.
 
-By assuming you have built the pass successfully, you can leverage an existing LLVM (both `clang` and `opt`) pipeline to run the pass as a plugin during the compilation of a C/C++ source file.
+By assuming you have built the pass successfully, you can leverage an existing LLVM (both `clang` and `opt`) default (`-O{0,1,2,3,s,z}`) pipeline to run the pass as a plugin during the lowerings/optimizations.
 
 ```bash
 ${LLVM_DIR}/bin/clang \
