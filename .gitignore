@@ -53,3 +53,5 @@ dkms.conf
 
 # My
 build/
+benchmarking/llvm-test-suite/
+benchmarking/test-suite-build/

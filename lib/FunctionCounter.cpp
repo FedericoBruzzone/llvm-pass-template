@@ -10,9 +10,14 @@
 //    `func-count` allows you to run FunctionCounter without `opt`.
 //
 // USAGE:
+//     1. Directly with `opt`:
 //      opt -load-pass-plugin libFunctionCounter.dylib `\`
 //        -passes="print<function-counter>" `\`
 //        -disable-output <input-llvm-file>
+//     2. Through an optimisation pipeline:
+//      opt -load-pass-plugin libOpcodeCounter.dylib --passes='default<O1>' `\`
+//        -disable-output <input-llvm-file>
+//
 //==============================================================================
 #include "FunctionCounter.h"
 
@@ -70,10 +75,24 @@ llvm::PassPluginLibraryInfo getFunctionCounterPluginInfo() {
                   }
                   return false;
                 });
+
             // #2 REGISTRATION FOR "MAM.getResult<FunctionCounter>(Module)"
             PB.registerAnalysisRegistrationCallback(
                 [](ModuleAnalysisManager &MAM) {
                   MAM.registerPass([&] { return FunctionCounter(); });
+                });
+
+            // #3 REGISTRATION FOR "-O{0,1,2,3,s,z}" default pipelines
+            // Register the pass as a step of an existing pipeline.
+            // The insertion point here is at the start of the function
+            // pipeline.
+            //
+            // Note that, even if the pass was a transform pass (modifying the
+            // IR), we would still use registerPipelineStartEPCallback to insert
+            // it at the start of the pipeline.
+            PB.registerPipelineStartEPCallback(
+                [](ModulePassManager &MPM, OptimizationLevel Level) {
+                  MPM.addPass(FunctionCounterPrinter(llvm::errs()));
                 });
           }};
 };
