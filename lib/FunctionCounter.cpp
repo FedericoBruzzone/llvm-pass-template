@@ -21,14 +21,16 @@
 //==============================================================================
 #include "FunctionCounter.h"
 
+#include "llvm/ADT/Statistic.h"
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
 #include "llvm/Support/Debug.h"
-#include <llvm/Support/raw_ostream.h>
+#include "llvm/Support/raw_ostream.h"
+using namespace llvm;
 
 #define DEBUG_TYPE "function-counter"
 
-using namespace llvm;
+STATISTIC(NumFunctions, "Number of functions in the module");
 
 // Pretty-prints the result of this analysis
 static void printFunctionCounterResult(llvm::raw_ostream &OutS,
@@ -39,8 +41,11 @@ static void printFunctionCounterResult(llvm::raw_ostream &OutS,
 // FunctionCounter Implementation
 //------------------------------------------------------------------------------
 FunctionCounter::Result FunctionCounter::runOnModule(Module &M) {
+  std::printf("FunctionCounter: Analyzing module %s\n",
+              M.getName().str().c_str());
   FunctionCounter::Result Res{};
   Res.value = M.size();
+  NumFunctions = Res.value;
   return Res;
 }
 
@@ -51,7 +56,6 @@ FunctionCounter::Result FunctionCounter::run(llvm::Module &M,
 
 PreservedAnalyses FunctionCounterPrinter::run(Module &M,
                                               ModuleAnalysisManager &MAM) {
-
   auto Functions = MAM.getResult<FunctionCounter>(M);
   printFunctionCounterResult(OS, Functions, M.getName());
   return PreservedAnalyses::all();
@@ -90,6 +94,8 @@ llvm::PassPluginLibraryInfo getFunctionCounterPluginInfo() {
             // Note that, even if the pass was a transform pass (modifying the
             // IR), we would still use registerPipelineStartEPCallback to insert
             // it at the start of the pipeline.
+            //
+            // More info: https://llvm.org/docs/NewPassManager.html
             PB.registerPipelineStartEPCallback(
                 [](ModulePassManager &MPM, OptimizationLevel Level) {
                   MPM.addPass(FunctionCounterPrinter(llvm::errs()));
@@ -108,7 +114,6 @@ llvmGetPassPluginInfo() {
 static void printFunctionCounterResult(raw_ostream &OutS,
                                        const ResultFunctionCounter &Functions,
                                        const StringRef ModuleName) {
-
   // The following is visible only if you pass -debug on the command line
   // and you have an assert build.
   // errs() is an alternative to dbgs()
@@ -127,4 +132,7 @@ static void printFunctionCounterResult(raw_ostream &OutS,
   OutS << format("%-30s %-10lu\n", ModuleNameS, Functions.value);
   OutS << "-------------------------------------------------"
        << "\n\n";
+
+  // Uncomment to flush the output stream immediately
+  // OutS.flush();
 }
