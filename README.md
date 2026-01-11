@@ -27,7 +27,7 @@ This repository is shipped with:
 
 ## Building the pass
 
-The [GUIDELINES.md](GUIDELINES.md) file includes detailed instructions on how to set up your system to have all the required dependencies, including LLVM 21 installation.
+The [GUIDELINES.md](GUIDELINES.md) file includes detailed instructions on how to set up your system to have an LLVM 21 installation.
 
 To easily emit _human-readable_ LLVM IR files (`.ll`) from C/C++ source files, you can use `clang`:
 

@@ -41,8 +41,6 @@ static void printFunctionCounterResult(llvm::raw_ostream &OutS,
 // FunctionCounter Implementation
 //------------------------------------------------------------------------------
 FunctionCounter::Result FunctionCounter::runOnModule(Module &M) {
-  std::printf("FunctionCounter: Analyzing module %s\n",
-              M.getName().str().c_str());
   FunctionCounter::Result Res{};
   Res.value = M.size();
   NumFunctions = Res.value;

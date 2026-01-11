@@ -63,3 +63,10 @@ cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_PROJ
 cmake --build .
 ```
 For more details read the [official documentation](https://llvm.org/docs/CMake.html).
+
+When building from sources, some additional information might be useful to know:
+- The LLVM\_DIR variable should point to the root of your LLVM build directory. For instance: `export LLVM_DIR=~/llvm-project/llvm-build`
+- `cmake -DLLVM_INSTALL_DIR=${LLVM_DIR} -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_ASSERTIONS=ON ..` can be used to enable LLVM assertions.
+- `nm -u ~/llvm-pass-template/build/lib/libFunctionCounter.{dylib|so} | grep ABIBreakingChecks` is expected to show `EnableABIBreakingChecks` because `./llvm-build/bin/llvm-config --assertion-mode` returns `ON`.
+- `./llvm-build/bin/llvm-lit -v -Dopt=~"/llvm-project/llvm-build/bin/opt -load-pass-plugin=~/llvm-pass-template/build/lib/libFunctionCounter.{dylib|so} -passes='print<function-counter>'" ./llvm/test/Transforms/TailCallElim/ackermann.ll` can be used to run tests against your custom `opt` binary. This has some problems regarding the fact that regression tests have already hardcoded `-passes=...` option, which overrides the one provided via `-Dopt=...`. A better way would be to build your pass as part of LLVM build itself.
+- `-DLLVM_ENABLE_ABI_BREAKING_CHECKS=1` can be used to enable ABI breaking checks in your pass build.
