@@ -15,7 +15,8 @@
 //        -passes="print<function-counter>" `\`
 //        -disable-output <input-llvm-file>
 //     2. Through an optimisation pipeline:
-//      opt -load-pass-plugin libOpcodeCounter.dylib --passes='default<O1>' `\`
+//      opt -load-pass-plugin libFunctionCounter.dylib `\`
+//        --passes='default<O1>' `\`
 //        -disable-output <input-llvm-file>
 //
 //==============================================================================
