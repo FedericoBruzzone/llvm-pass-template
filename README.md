@@ -27,7 +27,15 @@ This repository is shipped with:
 
 ## Building the pass
 
-The [GUIDELINES.md](GUIDELINES.md) file includes detailed instructions on how to set up your system to have an LLVM 21 installation.
+The [GUIDELINES.md](GUIDELINES.md) file includes detailed instructions on how to set up the system to have an LLVM 21 installation, and how to set the `LLVM_DIR` environment variable accordingly.
+For instance:
+```bash
+export LLVM_DIR=/usr/local/opt/llvm@21 # macOS Intel via Homebrew
+export LLVM_DIR=/opt/homebrew/opt/llvm@21 # macOS Apple Silicon via Homebrew
+export LLVM_DIR=/usr/lib/llvm-21 # Ubuntu x86_64 via apt
+export LLVM_DIR=~/llvm-project/llvm-build # LLVM 21 built
+```
+
 
 To easily emit _human-readable_ LLVM IR files (`.ll`) from C/C++ source files, you can use `clang`:
 
@@ -38,7 +46,6 @@ ${LLVM_DIR}/bin/clang -fno-discard-value-names -S -emit-llvm <file>.c -o <file>.
 To build the pass, run the following commands from the root of the repository:
 
 ```bash
-export LLVM_DIR=<see GUIDELINES.md to know the location of your LLVM 21 installation>
 mkdir build
 cd build
 cmake -DLLVM_INSTALL_DIR=${LLVM_DIR} .. # -G Ninja
@@ -68,7 +75,7 @@ ${LLVM_DIR}/bin/opt \
 > This section assume that your pass is registered as a step of an existing LLVM pipeline. 
 > To do so, you need to register your pass within the `getFunctionCounterPluginInfo()` function by using, for instance, `PB.registerPipelineStartEPCallback` which registers your pass at the start of a default pipeline.
 > Of course, there are a plethora of other registration methods you can use depending on where you want to insert your pass within the pipeline.
-> The [FunctionCounter.cpp](lib/FunctionCounter/FunctionCounter.cpp) file registers the **FunctionCounter** pass by using `PB.registerPipelineStartEPCallback` as an example.
+> The [FunctionCounter.cpp](lib/FunctionCounter.cpp) file registers the **FunctionCounter** pass by using `PB.registerPipelineStartEPCallback` as an example.
 
 By assuming you have built the pass successfully, you can leverage an existing LLVM (both `clang` and `opt`) default (`-O{0,1,2,3,s,z}`) pipeline to run the pass as a plugin during the lowerings/optimizations.
 
@@ -83,9 +90,9 @@ ${LLVM_DIR}/bin/clang \
 
 Optionally, you can also specify additional flags:
 
-- `-Rpass=<nome-del-pass>`: to report optimizations performed by the pass.
-- `-Rpass-missed=<nome-del-pass>`: to report missed optimizations by the pass.
-- `-Rpass-analysis=<nome-del-pass>`: to report analyses performed by the pass.
+- `-Rpass=<pass-name>`: to report optimizations performed by the pass.
+- `-Rpass-missed=<pass-name>`: to report missed optimizations by the pass.
+- `-Rpass-analysis=<pass-name>`: to report analyses performed by the pass.
 
 Or with `opt`:
 
@@ -124,7 +131,7 @@ On the other hand, it is not bundled with LLVM 21 packages, but you can install 
 To run the tests, execute the following command from the root of the repository:
 
 ```bash
-lit ./build/test
+lit -v -a ./build/test
 ```
 
 
