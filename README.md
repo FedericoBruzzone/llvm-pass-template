@@ -59,7 +59,7 @@ Run `./x.sh help` for the complete and detailed list of available commands.
 
 ## Building the pass
 
-The [GUIDELINES.md](GUIDELINES.md) file includes detailed instructions on how to set up the system to have an LLVM 21 installation, and how to set the `LLVM_DIR` environment variable accordingly.
+The [LLVM_INSTALLATION.md](LLVM_INSTALLATION.md) file includes detailed instructions on how to set up the system to have an LLVM 21 installation, and how to set the `LLVM_DIR` environment variable accordingly.
 For instance:
 
 ```bash
