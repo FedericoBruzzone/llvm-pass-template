@@ -31,7 +31,7 @@ This repository is shipped with:
 This repository includes a utility script called `x.sh` that streamlines the most common build, test, and usage operations for the LLVM pass.  
 You can use this script from the root of the repository to quickly execute the main commands without having to remember all the manual instructions.
 
-> [!Note]
+> [!NOTE]
 > The script uses the `LLVM_DIR` environment variable to locate your LLVM installation. If `LLVM_DIR` is not set, it defaults to `~/dev/llvm-project/llvm-build`.
 
 ### Main available commands:
