@@ -18,6 +18,7 @@
 #   build                      Build the project using make.
 #   rebuild                    Re-configure and build the project from scratch.
 #   run <file.ll>              Run the pass on a specific LLVM IR file.
+#   runS <file.ll>             Run the pass on a specific LLVM IR file with -S output.
 #   test                       Run the lit test suite.
 #   pipeline [level]           Print the optimization pipeline (default: -O0).
 #   inject <level> <file.ll>   Inject/replace the custom pass in an optimization pipeline.
@@ -47,6 +48,7 @@ print_usage() {
     echo "  build                      Build the project using make."
     echo "  rebuild                    Re-configure and build the project from scratch."
     echo "  run <file.ll>              Run the pass on a specific LLVM IR file."
+    echo "  runS <file.ll>             Run the pass on a specific LLVM IR file with -S output."
     echo "  test                       Run the lit test suite."
     echo "  pipeline [level]           Print the optimization pipeline (default: -O0)."
     echo "  inject <level> <file.ll>   Inject/replace the custom pass in an optimization pipeline."
@@ -77,7 +79,7 @@ case $COMMAND in
     build)
         echo "--- Building project ---"
         cd ${BUILD_DIR}
-        make -j$(nproc)
+        make
         ;;
 
     rebuild)
@@ -101,6 +103,22 @@ case $COMMAND in
             -disable-output -stats -debug \
             ${INPUT_FILE}
         ;;
+
+    runS)
+        if [ -z "$1" ]; then
+            echo "Error: Missing file argument for 'runS' command."
+            print_usage
+            exit 1
+        fi
+        INPUT_FILE=$1
+        echo "--- Running pass on ${INPUT_FILE} with -S output ---"
+        ${LLVM_DIR}/bin/opt \
+            --load-pass-plugin ${BUILD_DIR}/lib/${PASS_LIB_NAME} \
+            --passes="${PASS_NAME}" \
+            -stats -debug \
+            -S ${INPUT_FILE}
+        ;;
+
 
     test)
         echo "--- Running lit tests ---"
