@@ -26,37 +26,6 @@ This repository is shipped with:
 - A set of unit tests for the **FunctionCounter** pass using `llvm-lit` and `FileCheck` (see [Testing](#testing) section for more details).
 - A benchmarking setup using `llvm-test-suite` to measure the performance impact of your pass (see [Benchmarking with llvm-test-suite](#benchmarking-with-llvm-test-suite) section for more details).
 
-## Utility script: `x.sh`
-
-This repository includes a utility script called `x.sh` that streamlines the most common build, test, and usage operations for the LLVM pass.  
-You can use this script from the root of the repository to quickly execute the main commands without having to remember all the manual instructions.
-
-> [!NOTE]
-> The script uses the `LLVM_DIR` environment variable to locate your LLVM installation. If `LLVM_DIR` is not set, it defaults to `~/dev/llvm-project/llvm-build`.
-
-### Main available commands:
-
-- `config` — configure the project with CMake for a debug build.
-- `build` — build the project.
-- `rebuild` — reconfigure and rebuild the project from scratch.
-- `run <file.ll>` — run the pass on a specific LLVM IR file.
-- `test` — run the test suite with `lit`.
-- `pipeline [level]` — print the optimization pipeline (default: -O0).
-- `inject <level> <file.ll>` — inject/replace the custom pass in an optimization pipeline.
-- `emit-llvm <file.c> [level]` — generate LLVM IR from a C file (default: -O0).
-- `clean` — clean the build directory.
-- `help` — show the help message and list of commands.
-
-For example, to configure, build, and test the project you can simply run:
-
-```bash
-./x.sh config
-./x.sh build
-./x.sh test
-```
-
-Run `./x.sh help` for the complete and detailed list of available commands.
-
 ## Building the pass
 
 The [LLVM_INSTALLATION.md](LLVM_INSTALLATION.md) file includes detailed instructions on how to set up the system to have an LLVM 21 installation, and how to set the `LLVM_DIR` environment variable accordingly.
