@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         compiler:
@@ -24,19 +24,14 @@ jobs:
           CC: ${{ matrix.compiler.CC }}
           CXX: ${{ matrix.compiler.CXX }}
         run: |
-          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/llvm-keyring.gpg
-
-          echo "deb [signed-by=/usr/share/keyrings/llvm-keyring.gpg] http://apt.llvm.org/jammy/ llvm-toolchain-jammy-21 main" | sudo tee /etc/apt/sources.list.d/llvm.list
-
+          wget -O /tmp/llvm-snapshot.gpg.key https://apt.llvm.org/llvm-snapshot.gpg.key
+          sudo gpg --dearmor -o /usr/share/keyrings/llvm-snapshot.gpg /tmp/llvm-snapshot.gpg.key
+          echo "deb [signed-by=/usr/share/keyrings/llvm-snapshot.gpg] http://apt.llvm.org/noble/ llvm-toolchain-noble-21 main" | sudo tee /etc/apt/sources.list.d/llvm-21.list
+          sudo apt-get clean
           sudo apt-get update
-          sudo apt-get install -y --fix-missing \
-            llvm-21 \
-            llvm-21-dev \
-            llvm-21-tools \
-            clang-21 \
-            python3-setuptools
-
-          sudo pip3 install lit
+          sudo apt-get install -y llvm-21 llvm-21-dev llvm-21-tools clang-21
+          sudo apt-get install python3-setuptools
+          sudo pip3 install lit --break-system-packages
       - name: Build `llvm-pass-template`
         run: |
           cd $GITHUB_WORKSPACE
