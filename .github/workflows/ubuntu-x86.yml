@@ -1,11 +1,11 @@
 name: Ubuntu x86
 
-on: 
+on:
   push:
   pull_request:
-    branches: [ master ]
-  schedule:
-    - cron:  '0 0 * * *'
+    branches: [master]
+  # schedule:
+  #   - cron:  '0 0 * * *'
   workflow_dispatch:
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         compiler:
-          - { compiler: GNU,  CC: gcc,   CXX: g++ }
+          - { compiler: GNU, CC: gcc, CXX: g++ }
           - { compiler: LLVM, CC: clang, CXX: clang++ }
         type: [Debug, Release]
     steps:

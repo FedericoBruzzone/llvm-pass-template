@@ -1,11 +1,11 @@
 name: Apple Silicon
 
-on: 
+on:
   push:
   pull_request:
-    branches: [ main ]
-  schedule:
-    - cron:  '0 0 * * *'
+    branches: [main]
+  # schedule:
+  #   - cron:  '0 0 * * *'
   workflow_dispatch:
 
 jobs:
