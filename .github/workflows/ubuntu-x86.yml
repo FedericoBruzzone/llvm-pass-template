@@ -4,8 +4,8 @@ on:
   push:
   pull_request:
     branches: [master]
-  # schedule:
-  #   - cron:  '0 0 * * *'
+  schedule:
+    - cron: "0 0 1 * *"
   workflow_dispatch:
 
 jobs:
@@ -24,11 +24,18 @@ jobs:
           CC: ${{ matrix.compiler.CC }}
           CXX: ${{ matrix.compiler.CXX }}
         run: |
-          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          sudo apt-add-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-21 main"
+          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/llvm-keyring.gpg
+
+          echo "deb [signed-by=/usr/share/keyrings/llvm-keyring.gpg] http://apt.llvm.org/jammy/ llvm-toolchain-jammy-21 main" | sudo tee /etc/apt/sources.list.d/llvm.list
+
           sudo apt-get update
-          sudo apt-get install -y llvm-21 llvm-21-dev llvm-21-tools clang-21
-          sudo apt-get install python3-setuptools
+          sudo apt-get install -y --fix-missing \
+            llvm-21 \
+            llvm-21-dev \
+            llvm-21-tools \
+            clang-21 \
+            python3-setuptools
+
           sudo pip3 install lit
       - name: Build `llvm-pass-template`
         run: |
